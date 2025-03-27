@@ -21,7 +21,7 @@
   .layout-slide {
     width: $base-menu-width;
     height: 100vh;
-    background-color: cyan;
+    background-color: $base-menu-background;
   }
 }
 </style>
