@@ -1,7 +1,7 @@
 <template>
   <div class="login_container">
     <el-row>
-      <el-col :span="12" :xs="0">占位的位子</el-col>
+      <el-col :span="12" :xs="0"></el-col>
       <el-col :span="12" :xs="24">
         <el-form class="login-form">
           <h1>Hello</h1>
@@ -13,7 +13,7 @@
             <el-input type="password" :prefix-icon="Lock" v-model="loginForm.password" show-password></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="login_btn" type="primary" size="default" @click="login">登录</el-button>
+            <el-button :loading="loading" class="login_btn" type="primary" size="default" @click="login">登录</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -23,19 +23,53 @@
 
 <script setup lang="ts">
   import { User,Lock } from '@element-plus/icons-vue'
-  import { reactive } from 'vue'
+  import { reactive,ref } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { ElNotification } from 'element-plus'
   //引入用户相关的小仓库
   import useUserStore from '@/store/modules/user'
+  import { messageConfig } from 'element-plus'
+  //引入获取当前时间的函数
+  import { getTime } from '@/utils/time'
   let useStore = useUserStore()
+  //获取路由器
+  let $router = useRouter()
+  //定义变量控制按钮加载效果
+  let loading = ref(false)
   //收集账号与密码的数据
   let loginForm = reactive({username:'',password:''})
   //登录按钮回调
-  const login = () => {
+  const login = async () => {
+    //加载效果：开始加载
+    loading.value = true
     //通知仓库发登录请求
     //请求成功->首页展示数据
     //请求失败->弹出登录失败信息
-    useStore.userLogin(loginForm)
+    try {
+      //可以书写.then语法
+      //保证登录成功
+      await useStore.userLogin(loginForm)
+      //编程式导航跳转到展示数据首页
+      $router.push('/')
+      //登录成功的提示信息
+      ElNotification({
+        type:'success',
+        message:'欢迎回来',
+        title:`Hi,${getTime()}好`
+      })
+      //登录成功加载效果也消失
+    } catch (error) {
+      //登陆失败加载效果消失
+      loading.value = false
+      //登陆失败的提示信息
+      ElNotification({
+        type:'error',
+        message:(error as Error).message
+      })
+    }
   }
+
+  
 </script>
 
 <style scoped lang="scss">

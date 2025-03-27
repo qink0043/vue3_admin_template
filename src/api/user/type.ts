@@ -5,7 +5,8 @@ export interface loginForm {
 }
 
 interface dataType {
-  token: string
+  token?: string
+  message?: string
 }
 
 //登录接口返回数据类型
@@ -16,23 +17,23 @@ export interface loginResponseData {
 
 //定义服务器返回用户信息相关的用户类型
 
-interface userInfo{
-  userId:number,
-  avatar:string,
-  username:string,
-  password:string,
-  desc:string,
-  roles:string[],
-  buttons:string,
-  routes:string[],
-  token:string
+interface userInfo {
+  userId: number,
+  avatar: string,
+  username: string,
+  password: string,
+  desc: string,
+  roles: string[],
+  buttons: string,
+  routes: string[],
+  token: string
 }
 
-interface user{
-  checkUser:userInfo
+interface user {
+  checkUser: userInfo
 }
 
-export interface userResponseData{
-  code:number,
-  data:user
+export interface userResponseData {
+  code: number,
+  data: user
 }
