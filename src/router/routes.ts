@@ -1,33 +1,38 @@
+import { messageTypes } from 'element-plus'
+import component from 'virtual:svg-icons-register'
+
 export const constantRoute = [
   {
+    //登录
     path: '/login',
     component: () => import('@/views/login/index.vue'),
     name: 'login',
-    /* meta: {
-      title: 'login',
-      hidden: true,
-    }, */
+    meta: {
+      title: '登录',//菜单标题
+      hidden: true,//代表路由标题在菜单中是否隐藏
+      icon: "Promotion",//菜单文字左侧图标,支持element-plus全部图标
+    },
   },
   {
     //登陆成功后展示数据的路由
     path: '/',
     component: () => import('@/layout/index.vue'),
     name: 'layout',
-    /* meta: {
-      title: '',
+    meta: {
+      title: 'layout',
       hidden: false,
-      icon: '',
-    }, */
+      icon:'HomeFilled'
+    },
     // redirect: '/home',
     children: [
       {
         path: '/home',
         component: () => import('@/views/home/index.vue'),
-        /* meta: {
+        meta: {
           title: '首页',
           hidden: false,
-          icon: 'HomeFilled',
-        }, */
+          icon: 'HomeFilled'
+        },
       },
     ],
   },
@@ -50,6 +55,16 @@ export const constantRoute = [
       hidden: true,
     },
   },
+  {
+    //任意路由
+    path: '/pathMatch(.*)*',
+    redirect: '/404',
+    name: 'Any',
+    meta: {
+      title: '任意路由',
+      hidden: true,
+    }
+  }
 ]
 
 /* export const asyncRoute = [
@@ -150,13 +165,3 @@ export const constantRoute = [
     ],
   },
 ] */
-
-export const anyRoute = {
-  path: '/:pathMatch(.*)*',
-  redirect: '/404',
-  name: 'Any',
-  meta: {
-    title: '任意路由',
-    hidden: true,
-  },
-}

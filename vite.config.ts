@@ -7,7 +7,7 @@ import { viteMockServe } from 'vite-plugin-mock'
 // import DefineOptions from 'unplugin-vue-define-options/vite'
 // import VueSetupExtend from 'vite-plugin-vue-setup-extend'
 import path from 'path'
-// 引入svg
+// 引入svg需要的插件  
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 // https://vitejs.dev/config/
 export default ({ command }: ConfigEnv): UserConfigExport => {
@@ -27,7 +27,7 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
       // }),
       createSvgIconsPlugin({
         iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
-        symbolId: 'icon-[dir]-[name]',
+        symbolId: 'icon-[dir]-[name]'
       }),
       viteMockServe({
         localEnabled: command === 'serve',

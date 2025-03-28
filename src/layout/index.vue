@@ -9,7 +9,7 @@
         <!-- 菜单组件 -->
         <el-menu background-color="$base-menu-background" text-color="white">
           <!-- 根据路由动态生成菜单 -->
-           <Menu></Menu>
+          <Menu :menuList="userStore.menuRoutes"></Menu>
         </el-menu>
       </el-scrollbar>
     </div>
@@ -23,8 +23,14 @@
 </template>
 
 <script setup lang="ts">
+//引入左侧菜单logo子组件
 import Logo from './logo/index.vue'
-import Menu from './menu/index.vue';
+//引入菜单组件
+import Menu from './menu/index.vue'
+
+//获取用户相关的小仓库
+import useUserStore from '@/store/modules/user'
+let userStore = useUserStore()
 </script>
 
 <style scoped lang="scss">
@@ -40,6 +46,10 @@ import Menu from './menu/index.vue';
     .scrollbar {
       width: 100%;
       height: calc(100vh - $base-menu-logo-height);
+
+      .el-menu{
+        border-right: none;
+      }
     }
   }
 
