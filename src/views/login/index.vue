@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { User, Lock } from '@element-plus/icons-vue'
 import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { ElNotification } from 'element-plus'
 import type { ComponentSize, FormInstance, FormRules } from 'element-plus'
 //引入用户相关的小仓库
@@ -37,6 +37,7 @@ let useStore = useUserStore()
 let loginForms = ref()
 //获取路由器
 let $router = useRouter()
+let $route = useRoute()
 //定义变量控制按钮加载效果
 let loading = ref(false)
 //收集账号与密码的数据
@@ -45,8 +46,8 @@ let loginForm = reactive({ username: '', password: '' })
 const login = async () => {
   //保证全部表单校验通过后再发请求
   await loginForms.value.validate()
-  
-  
+
+
   //加载效果：开始加载
   loading.value = true
   //通知仓库发登录请求
@@ -57,7 +58,9 @@ const login = async () => {
     //保证登录成功
     await useStore.userLogin(loginForm)
     //编程式导航跳转到展示数据首页
-    $router.push('/')
+    //判断登录的时候是否有query参数，如果有就往参数跳转，如果没有就跳转到首页
+    let redirect: any = $route.query.redirect
+    $router.push({ path: redirect || '/' })
     //登录成功的提示信息
     ElNotification({
       type: 'success',
@@ -76,23 +79,23 @@ const login = async () => {
   }
 }
 //自定义校验规则需要的函数
-const validatorUserName = (rules:any,value:any,callback:any)=>{
+const validatorUserName = (rules: any, value: any, callback: any) => {
   //rule:即为数组校验规则对象
   //value:即为表单元素文本内容
-  if(value.length >= 5 && value.length <= 10) {
+  if (value.length >= 5 && value.length <= 10) {
     callback()
-  } else{
+  } else {
     callback(new Error('账号长度应为5-10位'))
   }
 }
-const validatorPassword = (rules:any,value:any,callback:any)=>{
+const validatorPassword = (rules: any, value: any, callback: any) => {
   //rule:即为数组校验规则对象
   //value:即为表单元素文本内容
-  if(value.length >= 6 && value.length <= 15) {
+  if (value.length >= 6 && value.length <= 15) {
     callback()
   } else
     callback(new Error('密码长度应为6-15位'))
-  }
+}
 //定义表单校验需要的配置对象
 const rules = reactive({
   //规则对象属性：
@@ -102,11 +105,11 @@ const rules = reactive({
   //trigger:触发校验表单的时机 change->文本发生变化时触发校验,blur:失去焦点的时候触发校验
   username: [
     // { required: true, min: 6, max: 10, message: '账号长度至少六位', trigger: 'change' }
-    {trigger:'change',validator: validatorUserName}
+    { trigger: 'change', validator: validatorUserName }
   ],
   password: [
     // { required: true, min: 6, max: 15, message: '密码的长度至少六位', trigger: 'change' }
-    {trigger:'change',validator: validatorPassword}
+    { trigger: 'change', validator: validatorPassword }
   ]
 })
 
